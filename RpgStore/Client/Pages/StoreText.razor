@@ -1,0 +1,48 @@
+﻿@page "/storetext"
+@using RpgStore.Shared
+@inject HttpClient Http
+
+
+<h3>StoreText</h3>
+@if (text == null)
+{
+    <button @onclick="Get">Get</button>
+
+    <span>Name</span>
+    <input type="text" @bind="@Name" />
+    <button @onclick="Put">Input</button>
+}
+else
+{
+
+    <tbody>
+        <tr>
+            <td>@text.Name</td>
+            <td>@text.Description</td>
+            <td>@text.TextContent</td>
+
+        </tr>
+    </tbody>
+    <button @onclick="Get">Test</button>
+}
+@code {
+    private string Name;
+    private Text text;
+    private Text inputText;
+    private async Task Get()
+    {
+        text = await Http.GetFromJsonAsync<Text>("Text");
+    }
+    private async Task Put()
+    {
+        inputText = new Text
+        {
+            Name = Name
+        };
+        await Http.PostAsJsonAsync<Text>("Text", inputText);
+    }
+
+}
+
+
+
