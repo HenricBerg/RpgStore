@@ -4,30 +4,38 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RpgStore.Server.Data_Management;
 using RpgStore.Shared;
 
 namespace RpgStore.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TextController : ControllerBase
+    public class CharacterController : ControllerBase
     {
-        [HttpGet]
-        public Text Get()
+        private readonly Filehandler filehandler;
+
+        public CharacterController()
         {
-            return new Text
+            filehandler = new Filehandler();
+        }
+
+        [HttpGet]
+        public Character Get()
+        {
+            return new Character
             {
                 Name = "TestName",
                 Description = "TestDescription",
-                TextContent = "TestContent",
                 Modified = DateTime.UtcNow
             };
         }
 
         [HttpPost]
-        public void Post(Text text)
+        public void Post(Character character)
         {
-            var text1 = text;
+            character.Modified = DateTime.UtcNow;
+            filehandler.AddNewCharacterFile(character);
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿@page "/storecharacter"
+@using RpgStore.Shared
+@inject HttpClient Http
+
+<body style="background-color:beige;">
+    <h3>Store Character</h3>
+        <span>Name</span>
+        <br />
+        <input type="text" @bind="@Name" />
+        <br />
+        <br />
+        <span>Description</span>
+        <br />
+        <input type="text" @bind="@Description" />
+        <br />
+        <br />
+        <button @onclick="Put">Input</button>
+</body>
+
+
+
+@code {
+    private string Name;
+    private string Description;
+    private Character inputCharacter;
+
+    private async Task Put()
+    {
+        inputCharacter = new Character
+        {
+            Name = Name,
+            Description = Description
+        };
+        await Http.PostAsJsonAsync<Character>("Character", inputCharacter);
+    }
+
+}
+
+
+
