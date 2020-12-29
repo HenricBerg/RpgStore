@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RpgStore.Shared;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RpgStore.Server.Data_Management
 {
@@ -13,6 +10,13 @@ namespace RpgStore.Server.Data_Management
         {
             var filePath = "..\\Files\\" + character.Name + ".txt";
             File.WriteAllText(filePath, JsonConvert.SerializeObject(character));
+        }
+
+        public Character GetCharacterFromFile(string name)
+        {
+            var filePath = "..\\Files\\" + name + ".txt";
+            Character character = JsonConvert.DeserializeObject<Character>(File.ReadAllText(filePath));
+            return character;
         }
     }
 }

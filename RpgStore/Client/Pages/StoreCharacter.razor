@@ -6,32 +6,66 @@
 <h3>Store Character</h3>
 <span>Name</span>
 <br />
-<input type="text" @bind="@Name" />
+<input type="text" @bind="@inputCharacter.Name"/> 
+<button @onclick="Get">Fetch Character</button>
 <br />
 <br />
 <span>Description</span>
 <br />
-<input type="text" @bind="@Description" />
-<br />
-<br />
-<button @onclick="Put">Input</button>
+<input type="text" @bind="@inputCharacter.Description" />
 
+<br />
+<br />
+<button @onclick="GenerateStats">Roll Stats!</button>
+<br />
+<br />
+@if (inputCharacter.Stats != null)
+{
+    <table>
+        <tbody>
+            <tr>
+                <td style="width:200px">
+                    Strength: @inputCharacter.Stats.Strength
+                    <br />
+                    Dexterity: @inputCharacter.Stats.Dexterity
+                    <br />
+                    Constitution: @inputCharacter.Stats.Constitution
+                </td>
+                <td style="width:200px">
+                    Intelligence: @inputCharacter.Stats.Intelligence
+                    <br />
+                    Wisdom: @inputCharacter.Stats.Wisdom
+                    <br />
+                    Charisma: @inputCharacter.Stats.Charisma
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+<br />
+<br />
+<button @onclick="Post">Store Character</button>
 
 
 
 @code {
-    private string Name;
-    private string Description;
-    private Character inputCharacter;
+    private Character inputCharacter = new Character();
 
-    private async Task Put()
+    private async Task Post()
     {
-        inputCharacter = new Character
-        {
-            Name = Name,
-            Description = Description
-        };
         await Http.PostAsJsonAsync<Character>("Character", inputCharacter);
+    }
+
+    private async Task GenerateStats()
+    {
+        inputCharacter.Stats = await Http.GetFromJsonAsync<Stats>("Stats");
+        StateHasChanged();
+    }
+
+    private async Task Get()
+    {
+        inputCharacter = await Http.GetFromJsonAsync<Character>("Character/"+inputCharacter.Name);
+        StateHasChanged();
     }
 
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RpgStore.Server.Data_Management;
 using RpgStore.Shared;
@@ -20,15 +16,10 @@ namespace RpgStore.Server.Controllers
             filehandler = new Filehandler();
         }
 
-        [HttpGet]
-        public Character Get()
+        [HttpGet("{name}")]
+        public Character Get(string name)
         {
-            return new Character
-            {
-                Name = "TestName",
-                Description = "TestDescription",
-                Modified = DateTime.UtcNow
-            };
+            return filehandler.GetCharacterFromFile(name);
         }
 
         [HttpPost]
